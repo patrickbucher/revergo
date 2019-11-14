@@ -1,20 +1,20 @@
 package board
 
-// Field represents a field value for a player.
-type Field int
+// State represents the state of a field.
+type State int
 
 const (
 	// Dimension is the number of rows/colums of the board.
 	Dimension int = 8
 
 	// Empty is an field not occupied yet (initial position)
-	Empty Field = 0
+	Empty State = 0
 
 	// Black is the value for the black player's positions.
-	Black Field = 1
+	Black State = 1
 
 	// White is the value for the white player's positions.
-	White Field = 2
+	White State = 2
 )
 
 // Direction is a descriptive label for a point of the compass.
@@ -51,10 +51,10 @@ var Shifts = map[Direction]Shift{
 }
 
 // Board is a two-dimensional array of fields.
-type Board [][]Field
+type Board [][]State
 
 // InitialPositions describes the initial positions of both players.
-var InitialPositions = map[Field][]Shift{
+var InitialPositions = map[State][]Shift{
 	Black: []Shift{
 		Shift{Dimension / 2, Dimension/2 - 1},
 		Shift{Dimension/2 - 1, Dimension / 2},

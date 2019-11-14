@@ -99,3 +99,48 @@ func TestEqualBoard(t *testing.T) {
 		t.Error("boardB is not supposed to be equal to boardA, but was")
 	}
 }
+
+var initialPlayerMoveTests = map[State][]*Move{
+	Black: {
+		&Move{2, 3},
+		&Move{3, 2},
+		&Move{4, 5},
+		&Move{5, 4},
+	},
+	White: {
+		&Move{2, 4},
+		&Move{3, 5},
+		&Move{4, 2},
+		&Move{5, 3},
+	},
+}
+
+func TestValidMovesInitialState(t *testing.T) {
+	board := InitialBoard()
+	for player, expected := range initialPlayerMoveTests {
+		got := board.ValidMoves(player)
+		if !sameMoves(got, expected) {
+			t.Errorf("for player %v expected valid moves %v but got %v",
+				player, expected, got)
+		}
+	}
+}
+
+func sameMoves(a, b []*Move) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for _, moveA := range a {
+		foundEqual := false
+		for _, moveB := range b {
+			if moveB.Equal(moveA) {
+				foundEqual = true
+				break
+			}
+		}
+		if !foundEqual {
+			return false
+		}
+	}
+	return true
+}

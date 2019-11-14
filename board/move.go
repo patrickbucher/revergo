@@ -1,6 +1,9 @@
 package board
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 // Move represents a player setting a stone to the given field (row/column).
 type Move struct {
@@ -28,4 +31,15 @@ func (m *Move) Equal(other *Move) bool {
 		return false
 	}
 	return m.Row == other.Row && m.Col == other.Col
+}
+
+// String returns the string representation of a move as Move(Row, Col).
+func (m *Move) String() string {
+	return fmt.Sprintf("Move(%d, %d)", m.Row, m.Col)
+}
+
+// Copy creates a copy of the given move.
+func (m *Move) Copy() *Move {
+	copied := Move{m.Row, m.Col}
+	return &copied
 }

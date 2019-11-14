@@ -53,3 +53,18 @@ func TestEqual(t *testing.T) {
 		}
 	}
 }
+
+var moveStringTests = map[*Move]string{
+	&Move{0, 0}: "Move(0, 0)",
+	&Move{0, 1}: "Move(0, 1)",
+	&Move{1, 0}: "Move(1, 0)",
+}
+
+func TestString(t *testing.T) {
+	for move, expected := range moveStringTests {
+		got := move.String()
+		if got != expected {
+			t.Errorf("expected string %s, got %s", expected, got)
+		}
+	}
+}
