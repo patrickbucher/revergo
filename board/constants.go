@@ -1,6 +1,6 @@
 package board
 
-// Field represents a field value.
+// Field represents a field value for a player.
 type Field int
 
 const (
@@ -32,7 +32,7 @@ const (
 	NorthWest
 )
 
-// Shift describes a move both in the x axis (column) and y axis (row).
+// Shift describes a shift both in the x axis (column) and y axis (row).
 type Shift struct {
 	Row int
 	Col int
