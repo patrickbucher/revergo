@@ -117,7 +117,43 @@ var initialPlayerMoveTests = map[State][]*Move{
 
 func TestValidMovesInitialState(t *testing.T) {
 	board := InitialBoard()
-	for player, expected := range initialPlayerMoveTests {
+	testValidMoves(board, t, initialPlayerMoveTests)
+}
+
+var inGamePlayerMoveTests = map[State][]*Move{
+	Black: {
+		&Move{0, 0},
+		&Move{1, 0},
+		&Move{1, 3},
+		&Move{2, 3},
+	},
+	White: {
+		&Move{0, 2},
+		&Move{1, 3},
+		&Move{3, 5},
+		&Move{4, 0},
+		&Move{4, 2},
+		&Move{5, 3},
+		&Move{5, 5},
+	},
+}
+
+func TestValidMovesInGameState(t *testing.T) {
+	board := &Board{
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 2, 1, 0, 0, 0, 0, 0},
+		{0, 0, 2, 0, 0, 0, 0, 0},
+		{1, 1, 1, 2, 1, 0, 0, 0},
+		{0, 0, 0, 1, 1, 0, 0, 0},
+		{0, 0, 0, 0, 1, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+	}
+	testValidMoves(board, t, inGamePlayerMoveTests)
+}
+
+func testValidMoves(board *Board, t *testing.T, tests map[State][]*Move) {
+	for player, expected := range tests {
 		got := board.ValidMoves(player)
 		if !sameMoves(got, expected) {
 			t.Errorf("for player %v expected valid moves %v but got %v",
