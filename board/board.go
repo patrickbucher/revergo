@@ -67,7 +67,7 @@ func (b *Board) ValidMoves(playerState State) []*Move {
 		if containsMove(validMoves, orig) {
 			continue
 		}
-		for p, err := orig.Apply(shift); err != ShiftError; p, err = p.Apply(shift) {
+		for p, err := orig.Apply(shift); err != ErrorShift; p, err = p.Apply(shift) {
 			// follow empty field in shift direction to opponent until own field found
 			pState := (*b)[p.Row][p.Col]
 			if pState == playerState {
@@ -103,7 +103,7 @@ func (b *Board) adjacentOf(fields []*Move, withState State) []*neighbourship {
 	for _, field := range fields {
 		for _, shift := range Shifts {
 			shifted, err := field.Apply(&shift)
-			if err != nil && err == ShiftError {
+			if err != nil && err == ErrorShift {
 				// out of bounds, no longer try this shift direction
 				continue
 			}

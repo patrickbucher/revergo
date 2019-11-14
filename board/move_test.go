@@ -11,7 +11,7 @@ type moveShift struct {
 
 var moveShiftTests = []moveShift{
 	{&Move{0, 0}, Shifts[SouthEast], &Move{1, 1}, nil},
-	{&Move{0, 0}, Shifts[NorthWest], nil, ShiftError},
+	{&Move{0, 0}, Shifts[NorthWest], nil, ErrorShift},
 }
 
 func TestApply(t *testing.T) {
