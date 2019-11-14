@@ -100,6 +100,17 @@ func TestEqualBoard(t *testing.T) {
 	}
 }
 
+func TestCopyBoard(t *testing.T) {
+	original := InitialBoard()
+	copied := original.Copy()
+	if original == copied {
+		t.Error("copy is not supposed to refer to the same memory area")
+	}
+	if !original.Equal(copied) {
+		t.Error("copy is supposed to be equal to original")
+	}
+}
+
 var initialPlayerMoveTests = map[State][]*Move{
 	Black: {
 		&Move{2, 3},

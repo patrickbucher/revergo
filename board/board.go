@@ -44,6 +44,17 @@ func (b *Board) Equal(other *Board) bool {
 	return true
 }
 
+// Copy copies the original board and returns the copy.
+func (b *Board) Copy() *Board {
+	copied := EmptyBoard()
+	for r := 0; r < Dimension; r++ {
+		for c := 0; c < Dimension; c++ {
+			(*copied)[r][c] = (*b)[r][c]
+		}
+	}
+	return copied
+}
+
 // ValidMoves determines all valid moves for the given player field.
 func (b *Board) ValidMoves(playerState State) []*Move {
 	validMoves := make([]*Move, 0)
