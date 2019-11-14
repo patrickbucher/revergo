@@ -3,7 +3,7 @@
 test:
 	go test ./...
 
-coverage:
+cover:
 	go test ./... -coverprofile=coverage.out
 	go tool cover -html=coverage.out
 	rm -f coverage.out

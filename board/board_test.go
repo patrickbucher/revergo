@@ -59,7 +59,6 @@ func TestEqualBoard(t *testing.T) {
 		{0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0},
 	}
-
 	if !boardA.Equal(boardA) {
 		t.Error("boardA is supposed to be equal to itself, but is not")
 	}
@@ -70,6 +69,33 @@ func TestEqualBoard(t *testing.T) {
 		t.Error("boardA is not supposed to be equal to boardB, but was")
 	}
 	if boardB.Equal(boardA) {
+		t.Error("boardB is not supposed to be equal to boardA, but was")
+	}
+
+	boardC := &Board{
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 1, 0, 0},
+		{0, 0, 0, 0, 1, 0, 0, 0},
+		{0, 2, 2, 2, 2, 0, 0, 0},
+		{0, 0, 0, 1, 2, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		// missing row
+	}
+	boardD := &Board{
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 1, 0, 0},
+		{0, 0, 0, 0, 1, 0, 0, 0},
+		{0, 2, 2, 2, 2, 0, 0, 0},
+		{0, 0, 0, 1, 2, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0}, // missing col
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+	}
+	if boardC.Equal(boardB) {
+		t.Error("boardB is not supposed to be equal to boardA, but was")
+	}
+	if boardD.Equal(boardB) {
 		t.Error("boardB is not supposed to be equal to boardA, but was")
 	}
 }
