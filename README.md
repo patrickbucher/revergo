@@ -15,3 +15,6 @@ Reversi implementation in Go for educational purposes (AI algorithms, golang, te
     - [ ] Corner/Edge Player: Goes for corners first, then for edges, then for a random move.
     - [ ] Minimax Player: Applies Minimax algorithm (concurrently) with a limited step.
     - [ ] other ideas: Minimax player with corner strategy, …
+- Modes
+    - [ ] Tournament with multiple players, playing against each other twice (first and second leg)
+    - [ ] Simulation with two players, playing a lot of rounds against one another
