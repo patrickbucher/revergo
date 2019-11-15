@@ -12,10 +12,11 @@ type RandomPlayer struct {
 }
 
 // NewRandomPlayer creates a new random player.
-func NewRandomPlayer(state board.State) *RandomPlayer {
+func NewRandomPlayer(state board.State) *Player {
 	randomPlayer := RandomPlayer{state}
 	rand.Seed(time.Now().Unix())
-	return &randomPlayer
+	player := Player(&randomPlayer)
+	return &player
 }
 
 // Play picks a random move from the board and returns it.

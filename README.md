@@ -16,5 +16,5 @@ Reversi implementation in Go for educational purposes (AI algorithms, golang, te
     - [ ] Minimax Player: Applies Minimax algorithm (concurrently) with a limited step.
     - [ ] other ideas: Minimax player with corner strategy, …
 - Modes
+    - [x] Simulation with two players, playing a lot of rounds against one another
     - [ ] Tournament with multiple players, playing against each other twice (first and second leg)
-    - [ ] Simulation with two players, playing a lot of rounds against one another

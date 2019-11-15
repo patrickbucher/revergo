@@ -1,6 +1,7 @@
 package game
 
 import (
+	"log"
 	"revergo/board"
 	player "revergo/player"
 )
@@ -15,6 +16,9 @@ type Game struct {
 // NewGame creates a new game with the two given players playerBlack and
 // playerWhite playing.
 func NewGame(playerBlack, playerWhite *player.Player) *Game {
+	if (*playerBlack).State() == (*playerWhite).State() {
+		panic("players must have different state values")
+	}
 	board := board.InitialBoard()
 	game := Game{playerBlack, playerWhite, board}
 	return &game
@@ -47,12 +51,12 @@ func (g *Game) Play() *Result {
 		move := (*currentPlayer).Play(g.board.Copy())
 		if move == nil {
 			stuckCount++
-			continue
-		}
-		if stuckCount == 2 {
-			diff, _ := g.board.Outcome(board.Black, board.White)
-			result := Result{board.Empty, diff}
-			return &result
+			if stuckCount == 2 {
+				log.Println("game is stuck")
+				diff, _ := g.board.Outcome(board.Black, board.White)
+				result := Result{board.Empty, diff}
+				return &result
+			}
 		}
 		newBoard, err := g.board.Play(move, (*currentPlayer).State())
 		if err == board.ErrorInvalidMove {
