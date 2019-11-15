@@ -33,6 +33,15 @@ type Result struct {
 	Stats map[string]*PlayerStatistics
 }
 
+// Table renders the result as a statistics table.
+func (r *Result) Table() string {
+	statsTable := make([]PlayerStatistics, 0)
+	for _, entry := range r.Stats {
+		statsTable = append(statsTable, *entry)
+	}
+	return statisticsTable(statsTable).Render()
+}
+
 // NewTournament creates a new, empty tournament.
 func NewTournament() *Tournament {
 	var tournament Tournament
