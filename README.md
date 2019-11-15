@@ -7,7 +7,7 @@ Reversi implementation in Go for educational purposes (AI algorithms, golang, te
 - Board
     - [x] determine valid moves
     - [x] apply player's move
-    - [ ] calculate outcome
+    - [x] calculate outcome
     - [ ] render board as string
 - Players
     - [ ] `STDIN` Player: Plays interactively from `STDIN`.

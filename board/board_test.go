@@ -281,3 +281,53 @@ func TestPlayBigMove(t *testing.T) {
 			White, move, fictional, expected, got)
 	}
 }
+
+func TestOutcomeInGame(t *testing.T) {
+	board := &Board{
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 2, 0, 0, 0},
+		{0, 0, 1, 2, 2, 0, 0, 0},
+		{0, 2, 2, 2, 2, 2, 0, 0},
+		{0, 0, 1, 0, 0, 0, 2, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+	}
+	black := 2
+	white := 9
+	expectedDiff := black - white
+	expectedFinished := false
+
+	gotDiff, gotFinished := board.Outcome(Black, White)
+	if gotDiff != expectedDiff {
+		t.Errorf("expected a differnce of %d, but got %d", expectedDiff, gotDiff)
+	}
+	if gotFinished != expectedFinished {
+		t.Errorf("expected finished to be %v, but was %v", expectedFinished, gotFinished)
+	}
+}
+
+func TestOutcomeFinished(t *testing.T) {
+	board := &Board{
+		{2, 2, 2, 2, 2, 2, 2, 2},
+		{2, 2, 1, 2, 1, 2, 1, 2},
+		{2, 1, 2, 2, 2, 1, 1, 2},
+		{2, 2, 2, 2, 2, 2, 2, 2},
+		{2, 1, 2, 2, 2, 1, 1, 2},
+		{2, 2, 1, 2, 1, 2, 1, 2},
+		{2, 1, 1, 2, 1, 1, 2, 2},
+		{2, 2, 2, 2, 2, 2, 2, 2},
+	}
+	white := 48
+	black := 16
+	expectedDiff := white - black
+	expectedFinished := true
+
+	gotDiff, gotFinished := board.Outcome(White, Black)
+	if gotDiff != expectedDiff {
+		t.Errorf("expected a differnce of %d, but got %d", expectedDiff, gotDiff)
+	}
+	if gotFinished != expectedFinished {
+		t.Errorf("expected finished to be %v, but was %v", expectedFinished, gotFinished)
+	}
+}

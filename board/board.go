@@ -118,6 +118,17 @@ func (b *Board) Play(move *Move, player State) (*Board, error) {
 	return board, nil
 }
 
+// Outcome determines the current outcome of the game as the difference between
+// player's and opponent's fields. If the board is full, a boolean indicating
+// the finished state of the game will be returned; otherwise, false is
+// returned.
+func (b *Board) Outcome(player State, opponent State) (int, bool) {
+	emptyFields := b.numberOfFields(Empty)
+	playerFields := b.numberOfFields(player)
+	opponentFields := b.numberOfFields(opponent)
+	return (playerFields - opponentFields), emptyFields == 0
+}
+
 func containsMove(moves []*Move, move *Move) bool {
 	for _, candidate := range moves {
 		if candidate.Equal(move) {
@@ -161,6 +172,18 @@ func (b *Board) emptyFields() []*Move {
 		}
 	}
 	return empty
+}
+
+func (b *Board) numberOfFields(state State) int {
+	n := 0
+	for r := 0; r < len(*b); r++ {
+		for c := 0; c < len((*b)[r]); c++ {
+			if (*b)[r][c] == state {
+				n++
+			}
+		}
+	}
+	return n
 }
 
 func other(this State) State {
