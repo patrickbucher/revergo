@@ -61,7 +61,7 @@ func (b *Board) Copy() *Board {
 func (b *Board) ValidMoves(playerState State) []*Move {
 	validMoves := make([]*Move, 0)
 	empty := b.emptyFields()
-	otherState := other(playerState)
+	otherState := Other(playerState)
 	neighbourships := b.adjacentOf(empty, otherState) // other's empty neighbours
 	for _, candidate := range neighbourships {
 		orig := candidate.origin.Copy()
@@ -97,7 +97,7 @@ func (b *Board) Play(move *Move, player State) (*Board, error) {
 	}
 	board := b.Copy()
 	(*board)[move.Row][move.Col] = player
-	opponent := other(player)
+	opponent := Other(player)
 	for _, shift := range Shifts {
 		chain := make([]*Move, 0)
 		for p, err := move.Apply(&shift); err != ErrorShift; p, err = p.Apply(&shift) {
@@ -127,6 +127,17 @@ func (b *Board) Outcome(player State, opponent State) (int, bool) {
 	playerFields := b.numberOfFields(player)
 	opponentFields := b.numberOfFields(opponent)
 	return (playerFields - opponentFields), emptyFields == 0
+}
+
+// Other returns the opponent's state of the given state.
+func Other(this State) State {
+	if this == Black {
+		return White
+	}
+	if this == White {
+		return Black
+	}
+	return Empty
 }
 
 func containsMove(moves []*Move, move *Move) bool {
@@ -184,14 +195,4 @@ func (b *Board) numberOfFields(state State) int {
 		}
 	}
 	return n
-}
-
-func other(this State) State {
-	if this == Black {
-		return White
-	}
-	if this == White {
-		return Black
-	}
-	return Empty
 }
