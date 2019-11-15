@@ -14,6 +14,8 @@ type MinimaxPlayer struct {
 	depth int
 }
 
+// DefaultDepth is the default maximum recursion depth for the Minimax
+// algorithm.
 const DefaultDepth = 3
 
 // NewMinimaxPlayerSpawnFunc creates a spawn func for the minimax player. Since
