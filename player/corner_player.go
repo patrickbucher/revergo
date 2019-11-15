@@ -22,10 +22,10 @@ func NewCornerPlayer(state board.State, name string) *Player {
 }
 
 var corners = []*board.Move{
-	&board.Move{0, 0},
-	&board.Move{0, board.Dimension - 1},
-	&board.Move{board.Dimension - 1, 0},
-	&board.Move{board.Dimension - 1, board.Dimension - 1},
+	&board.Move{Row: 0, Col: 0},
+	&board.Move{Row: 0, Col: board.Dimension - 1},
+	&board.Move{Row: board.Dimension - 1, Col: 0},
+	&board.Move{Row: board.Dimension - 1, Col: board.Dimension - 1},
 }
 
 // Play tries to pick a corner field if available, and otherwise just picks a random move.
