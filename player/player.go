@@ -6,4 +6,7 @@ import "revergo/board"
 type Player interface {
 	// Play returns the player's chosen move to the given board.
 	Play(board *board.Board) *board.Move
+
+	// State returns the player's state (Black or White).
+	State() board.State
 }

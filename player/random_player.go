@@ -21,6 +21,14 @@ func NewRandomPlayer(state board.State) *RandomPlayer {
 // Play picks a random move from the board and returns it.
 func (p *RandomPlayer) Play(board *board.Board) *board.Move {
 	moves := board.ValidMoves(p.state)
+	if len(moves) == 0 {
+		return nil
+	}
 	pick := rand.Intn(len(moves))
 	return moves[pick]
+}
+
+// State returns the player's state (Black or White).
+func (p *RandomPlayer) State() board.State {
+	return p.state
 }
