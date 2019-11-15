@@ -35,8 +35,9 @@ type Result struct {
 // Play lets the two players taking turns and modifies the board's state
 // accordingly until the game is finished. If the game is stuck, i.e. both
 // player were unable to pick a valid move in two successive rounds, the game
-// ends in a tie. If all moves can be played to the end, a result indicating
-// the winner and the difference is returned.
+// ends prematurely, with the winner being the player with more fields
+// captured. If all moves can be played to the end, a result indicating the
+// winner and the difference is returned.
 func (g *Game) Play() *Result {
 	var result Result
 	currentPlayer := g.playerWhite
@@ -54,7 +55,13 @@ func (g *Game) Play() *Result {
 			if stuckCount == 2 {
 				log.Println("game is stuck")
 				diff, _ := g.board.Outcome(board.Black, board.White)
-				result := Result{board.Empty, diff}
+				winner := board.Empty
+				if diff > 0 {
+					winner = board.Black
+				} else if diff < 0 {
+					winner = board.White
+				}
+				result := Result{winner, diff}
 				return &result
 			}
 		}
