@@ -79,7 +79,8 @@ func (t *Tournament) Play(rounds int) (*Result, error) {
 	}
 	pairings := t.pairUp()
 	results := make(map[string]*PlayerStatistics, 0)
-	for _, round := range pairings {
+	for i, round := range pairings {
+		fmt.Println("play game", i+1)
 		black := round.blackPlayer
 		white := round.whitePlayer
 		g := game.NewGame(black, white)
@@ -98,7 +99,7 @@ func (t *Tournament) Play(rounds int) (*Result, error) {
 			(*blackStat).Wins++
 			(*blackStat).Points += 3
 			(*whiteStat).Losses++
-		} else if r.Winner == board.Black {
+		} else if r.Winner == board.White {
 			(*whiteStat).Wins++
 			(*whiteStat).Points += 3
 			(*blackStat).Losses++
@@ -155,7 +156,7 @@ func (s statisticsTable) Render() string {
 	const rowFormat = "%8d\t%-16s\t%8d\t%8d\t%8d\t%8d\t%8d\n"
 	var sep16 = strings.Repeat("-", 16)
 	var sep8 = strings.Repeat("-", 8)
-	sort.Sort(s)
+	sort.Sort(sort.Reverse(s))
 	buf := bytes.NewBufferString("")
 	tw := new(tabwriter.Writer).Init(buf, 0, 8, 2, ' ', 0)
 	fmt.Fprintf(tw, headFormat, "Rank", "Player", "Points", "Won", "Lost", "Tied", "Diff")
