@@ -79,38 +79,39 @@ func (t *Tournament) Play(rounds int) (*Result, error) {
 	}
 	pairings := t.pairUp()
 	results := make(map[string]*PlayerStatistics, 0)
-	for i, round := range pairings {
-		fmt.Println("play game", i+1)
-		black := round.blackPlayer
-		white := round.whitePlayer
-		g := game.NewGame(black, white)
-		r := g.Play()
-		blackStat, ok := results[(*black).Name()]
-		if !ok {
-			blackStat = &PlayerStatistics{(*black).Name(), 0, 0, 0, 0, 0}
-			results[(*black).Name()] = blackStat
+	for r := 0; r < rounds; r++ {
+		for _, p := range pairings {
+			black := p.blackPlayer
+			white := p.whitePlayer
+			g := game.NewGame(black, white)
+			r := g.Play()
+			blackStat, ok := results[(*black).Name()]
+			if !ok {
+				blackStat = &PlayerStatistics{(*black).Name(), 0, 0, 0, 0, 0}
+				results[(*black).Name()] = blackStat
+			}
+			whiteStat, ok := results[(*white).Name()]
+			if !ok {
+				whiteStat = &PlayerStatistics{(*white).Name(), 0, 0, 0, 0, 0}
+				results[(*white).Name()] = whiteStat
+			}
+			if r.Winner == board.Black {
+				(*blackStat).Wins++
+				(*blackStat).Points += 3
+				(*whiteStat).Losses++
+			} else if r.Winner == board.White {
+				(*whiteStat).Wins++
+				(*whiteStat).Points += 3
+				(*blackStat).Losses++
+			} else if r.Winner == board.Empty {
+				(*whiteStat).Ties++
+				(*whiteStat).Ties++
+				(*blackStat).Points++
+				(*blackStat).Points++
+			}
+			(*blackStat).Diff += r.Difference
+			(*whiteStat).Diff -= r.Difference
 		}
-		whiteStat, ok := results[(*white).Name()]
-		if !ok {
-			whiteStat = &PlayerStatistics{(*white).Name(), 0, 0, 0, 0, 0}
-			results[(*white).Name()] = whiteStat
-		}
-		if r.Winner == board.Black {
-			(*blackStat).Wins++
-			(*blackStat).Points += 3
-			(*whiteStat).Losses++
-		} else if r.Winner == board.White {
-			(*whiteStat).Wins++
-			(*whiteStat).Points += 3
-			(*blackStat).Losses++
-		} else if r.Winner == board.Empty {
-			(*whiteStat).Ties++
-			(*whiteStat).Ties++
-			(*blackStat).Points++
-			(*blackStat).Points++
-		}
-		(*blackStat).Diff += r.Difference
-		(*whiteStat).Diff -= r.Difference
 	}
 	tournamentResult := Result{results}
 	return &tournamentResult, nil

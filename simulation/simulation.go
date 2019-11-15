@@ -12,16 +12,16 @@ import (
 )
 
 func main() {
-	numberOfGames := flag.Int("n", 1, "number of games")
+	numberOfRounds := flag.Int("n", 1, "number of rounds to play")
 	flag.Parse()
-	if *numberOfGames < 1 {
-		fmt.Fprintf(os.Stderr, "unable to play %d rounds\n", *numberOfGames)
+	if *numberOfRounds < 1 {
+		fmt.Fprintf(os.Stderr, "unable to play %d rounds\n", *numberOfRounds)
 		os.Exit(1)
 	}
 	playerBlack := player.NewRandomPlayer(board.Black, "Randy Random")
 	playerWhite := player.NewCornerPlayer(board.White, "Conny Corner")
 	playerBlackWins, playerWhiteWins, ties, diff := 0, 0, 0, 0
-	for i := 0; i < *numberOfGames; i++ {
+	for i := 0; i < *numberOfRounds; i++ {
 		game := game.NewGame(playerBlack, playerWhite)
 		result := game.Play()
 		diff += result.Difference
