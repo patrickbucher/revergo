@@ -87,12 +87,12 @@ func (t *Tournament) Play(rounds int) (*Result, error) {
 			r := g.Play()
 			blackStat, ok := results[(*black).Name()]
 			if !ok {
-				blackStat = &PlayerStatistics{(*black).Name(), 0, 0, 0, 0, 0}
+				blackStat = &PlayerStatistics{(*black).Name(), 0, 0, 0, 0, 0, 0}
 				results[(*black).Name()] = blackStat
 			}
 			whiteStat, ok := results[(*white).Name()]
 			if !ok {
-				whiteStat = &PlayerStatistics{(*white).Name(), 0, 0, 0, 0, 0}
+				whiteStat = &PlayerStatistics{(*white).Name(), 0, 0, 0, 0, 0, 0}
 				results[(*white).Name()] = whiteStat
 			}
 			if r.Winner == board.Black {
@@ -104,11 +104,13 @@ func (t *Tournament) Play(rounds int) (*Result, error) {
 				(*whiteStat).Points += 3
 				(*blackStat).Losses++
 			} else if r.Winner == board.Empty {
-				(*whiteStat).Ties++
+				(*blackStat).Ties++
 				(*whiteStat).Ties++
 				(*blackStat).Points++
-				(*blackStat).Points++
+				(*whiteStat).Points++
 			}
+			(*blackStat).Games++
+			(*whiteStat).Games++
 			(*blackStat).Diff += r.Difference
 			(*whiteStat).Diff -= r.Difference
 		}
@@ -138,6 +140,7 @@ func (t *Tournament) pairUp() []pairing {
 // points are handed out as follows: Win: 3, Tie: 1, Loss: 0.
 type PlayerStatistics struct {
 	Name   string
+	Games  int
 	Wins   int
 	Losses int
 	Ties   int
@@ -153,17 +156,17 @@ func (s statisticsTable) Less(i, j int) bool { return s[i].Points < s[j].Points 
 
 // Render renders the statistics table in descending of the number of points scored.
 func (s statisticsTable) Render() string {
-	const headFormat = "%8s\t%-16s\t%8s\t%8s\t%8s\t%8s\t%8s\n"
-	const rowFormat = "%8d\t%-16s\t%8d\t%8d\t%8d\t%8d\t%8d\n"
+	const headFormat = "%8s\t%-16s\t%8s\t%8s\t%8s\t%8s\t%8s\t%8s\n"
+	const rowFormat = "%8d\t%-16s\t%8d\t%8d\t%8d\t%8d\t%8d\t%8d\n"
 	var sep16 = strings.Repeat("-", 16)
 	var sep8 = strings.Repeat("-", 8)
 	sort.Sort(sort.Reverse(s))
 	buf := bytes.NewBufferString("")
 	tw := new(tabwriter.Writer).Init(buf, 0, 8, 2, ' ', 0)
-	fmt.Fprintf(tw, headFormat, "Rank", "Player", "Points", "Won", "Lost", "Tied", "Diff")
-	fmt.Fprintf(tw, headFormat, sep8, sep16, sep8, sep8, sep8, sep8, sep8)
+	fmt.Fprintf(tw, headFormat, "Rank", "Player", "Points", "Games", "Won", "Lost", "Tied", "Diff")
+	fmt.Fprintf(tw, headFormat, sep8, sep16, sep8, sep8, sep8, sep8, sep8, sep8)
 	for rank, stats := range s {
-		fmt.Fprintf(tw, rowFormat, rank+1, stats.Name, stats.Points, stats.Wins, stats.Losses,
+		fmt.Fprintf(tw, rowFormat, rank+1, stats.Name, stats.Points, stats.Games, stats.Wins, stats.Losses,
 			stats.Ties, stats.Diff)
 	}
 	tw.Flush()
