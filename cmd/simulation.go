@@ -7,6 +7,7 @@ import (
 	"revergo/board"
 	"revergo/game"
 	"revergo/player"
+	"strings"
 	"text/tabwriter"
 )
 
@@ -36,11 +37,13 @@ func main() {
 }
 
 func printResults(blackWins, whiteWins, ties, diff int) {
-	const headFormat = "%s\t%s\t%s\t%s\t%s\n"
-	const rowFormat = "%s\t%3d\t%4d\t%4d\t%4d\n"
+	const headFormat = "%-16s\t%5s\t%5s\t%5s\t%5s\n"
+	const rowFormat = "%-16s\t%5d\t%5d\t%5d\t%5d\n"
+	sep16 := strings.Repeat("-", 16)
+	sep5 := strings.Repeat("-", 5)
 	tw := new(tabwriter.Writer).Init(os.Stdout, 0, 8, 2, ' ', 0)
 	fmt.Fprintf(tw, headFormat, "Player", "Won", "Lost", "Tied", "Diff")
-	fmt.Fprintf(tw, headFormat, "------", "---", "----", "----", "----")
+	fmt.Fprintf(tw, headFormat, sep16, sep5, sep5, sep5, sep5)
 	fmt.Fprintf(tw, rowFormat, "Black", blackWins, whiteWins, ties, diff)
 	fmt.Fprintf(tw, rowFormat, "White", whiteWins, blackWins, ties, diff*-1)
 	tw.Flush()
