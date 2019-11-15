@@ -1,5 +1,7 @@
 package board
 
+import "errors"
+
 // EmptyBoard creates a new Board with every field set to Empty.
 func EmptyBoard() *Board {
 	var board Board
@@ -81,6 +83,39 @@ func (b *Board) ValidMoves(playerState State) []*Move {
 		}
 	}
 	return validMoves
+}
+
+// ErrorInvalidMove is the result of an invalid move played on the board.
+var ErrorInvalidMove = errors.New("the move is invalid")
+
+// Play applies a move for the given player and returns a new board with the
+// move played. If the move is not valid, ErrorInvalidMove is returned.
+func (b *Board) Play(move *Move, player State) (*Board, error) {
+	validMoves := b.ValidMoves(player)
+	if !containsMove(validMoves, move) {
+		return nil, ErrorInvalidMove
+	}
+	board := b.Copy()
+	(*board)[move.Row][move.Col] = player
+	opponent := other(player)
+	for _, shift := range Shifts {
+		chain := make([]*Move, 0)
+		for p, err := move.Apply(&shift); err != ErrorShift; p, err = p.Apply(&shift) {
+			if (*board)[p.Row][p.Col] == opponent {
+				// opponent's field: mark for take-over
+				chain = append(chain, p)
+			} else if (*board)[p.Row][p.Col] == player {
+				// own field at the end of a row: apply take-over
+				for _, captured := range chain {
+					(*board)[captured.Row][captured.Col] = player
+				}
+				break
+			} else if (*board)[p.Row][p.Col] == Empty {
+				break
+			}
+		}
+	}
+	return board, nil
 }
 
 func containsMove(moves []*Move, move *Move) bool {

@@ -191,3 +191,64 @@ func sameMoves(a, b []*Move) bool {
 	}
 	return true
 }
+
+func TestPlayInalidMoves(t *testing.T) {
+	initial := &Board{
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 2, 0, 0, 0},
+		{0, 0, 1, 2, 2, 0, 0, 0},
+		{0, 0, 1, 1, 1, 2, 0, 0},
+		{0, 0, 1, 0, 0, 0, 2, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+	}
+
+	illegalBlackMove := &Move{6, 6}
+	_, err := initial.Play(illegalBlackMove, Black)
+	if err != ErrorInvalidMove {
+		t.Errorf("play %v move %v to \n%v\n should cause error",
+			Black, illegalBlackMove, initial)
+	}
+
+	illegalWhiteMove := &Move{1, 4}
+	_, err = initial.Play(illegalWhiteMove, White)
+	if err != ErrorInvalidMove {
+		t.Errorf("play %v move %v to \n%v\n should cause error",
+			White, illegalWhiteMove, initial)
+	}
+}
+
+func TestPlayValidMoves(t *testing.T) {
+	initial := &Board{
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 2, 0, 0, 0},
+		{0, 0, 1, 2, 2, 0, 0, 0},
+		{0, 0, 1, 1, 1, 2, 0, 0},
+		{0, 0, 1, 0, 0, 0, 2, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+	}
+
+	afterBlackMove := &Board{
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 1, 0, 0, 0},
+		{0, 0, 0, 0, 1, 0, 0, 0},
+		{0, 0, 1, 2, 1, 0, 0, 0},
+		{0, 0, 1, 1, 1, 2, 0, 0},
+		{0, 0, 1, 0, 0, 0, 2, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+	}
+	blackMove := &Move{1, 4}
+	got, err := initial.Play(blackMove, Black)
+	if err != nil {
+		t.Errorf("applying %d move %v to \n%v\n caused an unexpected error %v",
+			Black, blackMove, initial, err)
+	}
+	if !got.Equal(afterBlackMove) {
+		t.Errorf("applying %d move %v to \n%v\n expected to be \n%v\n but was \n%v",
+			Black, blackMove, initial, afterBlackMove, got)
+	}
+}
