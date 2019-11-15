@@ -19,7 +19,7 @@ func main() {
 		os.Exit(1)
 	}
 	playerBlack := player.NewRandomPlayer(board.Black)
-	playerWhite := player.NewRandomPlayer(board.White)
+	playerWhite := player.NewCornerPlayer(board.White)
 	playerBlackWins, playerWhiteWins, ties, diff := 0, 0, 0, 0
 	for i := 0; i < *numberOfGames; i++ {
 		game := game.NewGame(playerBlack, playerWhite)
@@ -37,13 +37,13 @@ func main() {
 }
 
 func printResults(blackWins, whiteWins, ties, diff int) {
-	const headFormat = "%-16s\t%5s\t%5s\t%5s\t%5s\n"
-	const rowFormat = "%-16s\t%5d\t%5d\t%5d\t%5d\n"
+	const headFormat = "%-16s\t%8s\t%8s\t%8s\t%8s\n"
+	const rowFormat = "%-16s\t%8d\t%8d\t%8d\t%8d\n"
 	sep16 := strings.Repeat("-", 16)
-	sep5 := strings.Repeat("-", 5)
+	sep8 := strings.Repeat("-", 8)
 	tw := new(tabwriter.Writer).Init(os.Stdout, 0, 8, 2, ' ', 0)
 	fmt.Fprintf(tw, headFormat, "Player", "Won", "Lost", "Tied", "Diff")
-	fmt.Fprintf(tw, headFormat, sep16, sep5, sep5, sep5, sep5)
+	fmt.Fprintf(tw, headFormat, sep16, sep8, sep8, sep8, sep8)
 	fmt.Fprintf(tw, rowFormat, "Black", blackWins, whiteWins, ties, diff)
 	fmt.Fprintf(tw, rowFormat, "White", whiteWins, blackWins, ties, diff*-1)
 	tw.Flush()
