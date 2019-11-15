@@ -70,15 +70,16 @@ func minimax(b *board.Board, self, other board.State, depth int) outcome {
 			panic("applied invalid move")
 		}
 		wg.Add(1)
+		m := &board.Move{Row: move.Row, Col: move.Col}
 		go func() {
 			defer wg.Done()
 			if depth > 1 {
 				// players switched: other <-> self
 				result := minimax(result, other, self, depth-1)
-				ch <- outcome{result.diff, move.Copy()}
+				ch <- outcome{result.diff, m}
 			} else {
 				diff, _ := b.Outcome(self, other)
-				ch <- outcome{diff, move.Copy()}
+				ch <- outcome{diff, m}
 			}
 		}()
 	}
