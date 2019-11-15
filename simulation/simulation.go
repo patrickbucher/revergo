@@ -19,7 +19,7 @@ func main() {
 		os.Exit(1)
 	}
 	playerBlack := player.NewRandomPlayer(board.Black, "Randy Random")
-	playerWhite := player.NewCornerPlayer(board.White, "Conny Corner")
+	playerWhite := player.NewMinimaxPlayer(board.White, "Mini Max")
 	playerBlackWins, playerWhiteWins, ties, diff := 0, 0, 0, 0
 	for i := 0; i < *numberOfRounds; i++ {
 		game := game.NewGame(playerBlack, playerWhite)
