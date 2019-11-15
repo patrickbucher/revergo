@@ -129,6 +129,12 @@ func (b *Board) Outcome(player State, opponent State) (int, bool) {
 	return (playerFields - opponentFields), emptyFields == 0
 }
 
+// TurnsLeft returns the number of turns left, i.e. the number of Empty fields
+// on the board.
+func (b *Board) TurnsLeft() int {
+	return b.numberOfFields(Empty)
+}
+
 // Other returns the opponent's state of the given state.
 func Other(this State) State {
 	if this == Black {

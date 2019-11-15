@@ -1,6 +1,7 @@
 package player
 
 import (
+	"math"
 	"revergo/board"
 )
 
@@ -48,7 +49,8 @@ func (p *MinimaxPlayer) Play(b *board.Board) *board.Move {
 	if len(candidates) == 1 {
 		return candidates[0]
 	}
-	outcome := minimax(b, p.state, board.Other(p.state), p.depth)
+	depth := int(math.Min(float64(b.TurnsLeft()), float64(p.depth)))
+	outcome := minimax(b, p.state, board.Other(p.state), depth)
 	return outcome.move
 }
 
