@@ -150,9 +150,14 @@ type PlayerStatistics struct {
 
 type statisticsTable []PlayerStatistics
 
-func (s statisticsTable) Len() int           { return len(s) }
-func (s statisticsTable) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
-func (s statisticsTable) Less(i, j int) bool { return s[i].Points < s[j].Points }
+func (s statisticsTable) Len() int      { return len(s) }
+func (s statisticsTable) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
+func (s statisticsTable) Less(i, j int) bool {
+	if s[i].Points == s[j].Points {
+		return s[i].Diff < s[j].Diff
+	}
+	return s[i].Points < s[j].Points
+}
 
 // Render renders the statistics table in descending of the number of points scored.
 func (s statisticsTable) Render() string {
