@@ -76,7 +76,8 @@ func minimax(b *board.Board, self, other board.State, depth int) outcome {
 			if depth > 1 {
 				// players switched: other <-> self
 				result := minimax(result, other, self, depth-1)
-				ch <- outcome{result.diff, m}
+				// invert outcome: our move with opponent's weakest counter move
+				ch <- outcome{result.diff * -1, m}
 			} else {
 				diff, _ := b.Outcome(self, other)
 				ch <- outcome{diff, m}
