@@ -19,6 +19,7 @@ func main() {
 	t := tournament.NewTournament()
 	t.AddPlayer("Randy Random", player.NewRandomPlayer)
 	t.AddPlayer("Conny Corner", player.NewCornerPlayer)
+	t.AddPlayer("Edgy Edge", player.NewEdgePlayer)
 	r, err := t.Play(*numberOfRounds)
 	if err != nil {
 		log.Print(err)
