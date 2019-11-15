@@ -21,7 +21,7 @@ func main() {
 	t.AddPlayer("Conny Corner", player.NewCornerPlayer)
 	t.AddPlayer("Edgy Edge", player.NewEdgePlayer)
 	t.AddPlayer("Max Round", player.NewMaxroundPlayer)
-	t.AddPlayer("Mini Max", player.NewMinimaxPlayerSpawnFunc(3))
+	t.AddPlayer("Mini Max", player.NewMinimaxPlayerSpawnFunc(4))
 	r, err := t.Play(*numberOfRounds)
 	if err != nil {
 		log.Print(err)

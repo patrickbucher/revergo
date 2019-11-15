@@ -48,13 +48,39 @@ func (p *MinimaxPlayer) Play(b *board.Board) *board.Move {
 	if len(candidates) == 1 {
 		return candidates[0]
 	}
-	bestMove := minimax(b, p.state, p.depth)
-	return bestMove
+	outcome := minimax(b, p.state, board.Other(p.state), p.depth)
+	return outcome.move
 }
 
-func minimax(b *board.Board, self board.State, depth int) *board.Move {
-	moves := b.ValidMoves(self)
-	return moves[0]
+type outcome struct {
+	diff int
+	move *board.Move
+}
+
+func minimax(b *board.Board, self, other board.State, depth int) outcome {
+	validMoves := b.ValidMoves(self)
+	outcomes := make([]outcome, 0)
+	for _, move := range validMoves {
+		result, err := b.Play(move, self)
+		if err != nil {
+			panic("applied invalid move")
+		}
+		if depth > 1 {
+			// players switched: other <-> self
+			result := minimax(result, other, self, depth-1)
+			outcomes = append(outcomes, outcome{result.diff, move.Copy()})
+		} else {
+			diff, _ := b.Outcome(self, other)
+			outcomes = append(outcomes, outcome{diff, move.Copy()})
+		}
+	}
+	bestOutcome := outcome{(board.Dimension * board.Dimension) * -1, nil}
+	for _, result := range outcomes {
+		if result.diff > bestOutcome.diff {
+			bestOutcome = result
+		}
+	}
+	return bestOutcome
 }
 
 // State returns the player's state (Black or White).
