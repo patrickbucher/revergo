@@ -11,7 +11,8 @@ Reversi implementation in Go for educational purposes (AI algorithms, golang, te
     - [ ] render board as string
 - Players
     - [ ] `STDIN` Player: Plays interactively from `STDIN`.
-    - [ ] Random Player: Picks a random move for every round.
+    - [x] Random Player: Picks a random move for every round.
+    - [x] Corner Player: Goes for corners first, then for a random move.
     - [ ] Corner/Edge Player: Goes for corners first, then for edges, then for a random move.
     - [ ] Minimax Player: Applies Minimax algorithm (concurrently) with a limited step.
     - [ ] other ideas: Minimax player with corner strategy, …

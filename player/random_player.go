@@ -9,11 +9,12 @@ import (
 // RandomPlayer is a player that picks a random valid move.
 type RandomPlayer struct {
 	state board.State
+	name  string
 }
 
 // NewRandomPlayer creates a new random player.
-func NewRandomPlayer(state board.State) *Player {
-	randomPlayer := RandomPlayer{state}
+func NewRandomPlayer(state board.State, name string) *Player {
+	randomPlayer := RandomPlayer{state, name}
 	rand.Seed(time.Now().Unix())
 	player := Player(&randomPlayer)
 	return &player
@@ -32,4 +33,9 @@ func (p *RandomPlayer) Play(board *board.Board) *board.Move {
 // State returns the player's state (Black or White).
 func (p *RandomPlayer) State() board.State {
 	return p.state
+}
+
+// Name returns the player's name.
+func (p *RandomPlayer) Name() string {
+	return p.name
 }

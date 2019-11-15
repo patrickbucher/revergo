@@ -9,4 +9,7 @@ type Player interface {
 
 	// State returns the player's state (Black or White).
 	State() board.State
+
+	// Name returns the player's name.
+	Name() string
 }

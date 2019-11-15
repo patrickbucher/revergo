@@ -10,6 +10,15 @@ import (
 // otherwise picks a random move.
 type CornerPlayer struct {
 	state board.State
+	name  string
+}
+
+// NewCornerPlayer creates a new corner player.
+func NewCornerPlayer(state board.State, name string) *Player {
+	cornerPlayer := CornerPlayer{state, name}
+	rand.Seed(time.Now().Unix())
+	player := Player(&cornerPlayer)
+	return &player
 }
 
 var corners = []*board.Move{
@@ -17,14 +26,6 @@ var corners = []*board.Move{
 	&board.Move{0, board.Dimension - 1},
 	&board.Move{board.Dimension - 1, 0},
 	&board.Move{board.Dimension - 1, board.Dimension - 1},
-}
-
-// NewCornerPlayer creates a new corner player.
-func NewCornerPlayer(state board.State) *Player {
-	cornerPlayer := CornerPlayer{state}
-	rand.Seed(time.Now().Unix())
-	player := Player(&cornerPlayer)
-	return &player
 }
 
 // Play tries to pick a corner field if available, and otherwise just picks a random move.
@@ -47,4 +48,9 @@ func (p *CornerPlayer) Play(board *board.Board) *board.Move {
 // State returns the player's state (Black or White).
 func (p *CornerPlayer) State() board.State {
 	return p.state
+}
+
+// Name returns the player's name.
+func (p *CornerPlayer) Name() string {
+	return p.name
 }
