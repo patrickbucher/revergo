@@ -3,6 +3,7 @@ package player
 import (
 	"math"
 	"revergo/board"
+	"sync"
 )
 
 // MinimaxPlayer is a player that tries to optimize the outcome for the whole
@@ -61,27 +62,36 @@ type outcome struct {
 
 func minimax(b *board.Board, self, other board.State, depth int) outcome {
 	validMoves := b.ValidMoves(self)
-	outcomes := make([]outcome, 0)
+	ch := make(chan outcome)
+	var wg sync.WaitGroup
 	for _, move := range validMoves {
 		result, err := b.Play(move, self)
 		if err != nil {
 			panic("applied invalid move")
 		}
-		if depth > 1 {
-			// players switched: other <-> self
-			result := minimax(result, other, self, depth-1)
-			outcomes = append(outcomes, outcome{result.diff, move.Copy()})
-		} else {
-			diff, _ := b.Outcome(self, other)
-			outcomes = append(outcomes, outcome{diff, move.Copy()})
-		}
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			if depth > 1 {
+				// players switched: other <-> self
+				result := minimax(result, other, self, depth-1)
+				ch <- outcome{result.diff, move.Copy()}
+			} else {
+				diff, _ := b.Outcome(self, other)
+				ch <- outcome{diff, move.Copy()}
+			}
+		}()
 	}
 	bestOutcome := outcome{(board.Dimension * board.Dimension) * -1, nil}
-	for _, result := range outcomes {
-		if result.diff > bestOutcome.diff {
-			bestOutcome = result
+	go func() {
+		for result := range ch {
+			if result.diff > bestOutcome.diff {
+				bestOutcome = result
+			}
 		}
-	}
+	}()
+	wg.Wait()
+	close(ch)
 	return bestOutcome
 }
 
