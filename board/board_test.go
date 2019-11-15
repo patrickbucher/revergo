@@ -252,3 +252,32 @@ func TestPlayValidMoves(t *testing.T) {
 			Black, blackMove, initial, afterBlackMove, got)
 	}
 }
+
+func TestPlayBigMove(t *testing.T) {
+	fictional := &Board{
+		{2, 2, 2, 2, 2, 2, 2, 2},
+		{2, 1, 1, 1, 1, 1, 1, 2},
+		{2, 1, 1, 1, 1, 1, 1, 2},
+		{2, 1, 1, 0, 1, 1, 1, 2},
+		{2, 1, 1, 1, 1, 1, 1, 2},
+		{2, 1, 1, 1, 1, 1, 1, 2},
+		{2, 1, 1, 1, 1, 1, 1, 2},
+		{2, 2, 2, 2, 2, 2, 2, 2},
+	}
+	expected := &Board{
+		{2, 2, 2, 2, 2, 2, 2, 2},
+		{2, 2, 1, 2, 1, 2, 1, 2},
+		{2, 1, 2, 2, 2, 1, 1, 2},
+		{2, 2, 2, 2, 2, 2, 2, 2},
+		{2, 1, 2, 2, 2, 1, 1, 2},
+		{2, 2, 1, 2, 1, 2, 1, 2},
+		{2, 1, 1, 2, 1, 1, 2, 2},
+		{2, 2, 2, 2, 2, 2, 2, 2},
+	}
+	move := &Move{3, 3}
+	got, _ := fictional.Play(move, White)
+	if !got.Equal(expected) {
+		t.Errorf("applying %d move %v to \n%v\n expected to be \n%v\n but was \n%v",
+			White, move, fictional, expected, got)
+	}
+}
