@@ -6,7 +6,7 @@ Reversi implementation in Go for educational purposes (AI algorithms, golang, te
 
 - Board
     - [x] determine valid moves
-    - [ ] apply player's moe
+    - [x] apply player's move
     - [ ] calculate outcome
     - [ ] render board as string
 - Players
