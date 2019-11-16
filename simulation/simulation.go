@@ -18,8 +18,8 @@ func main() {
 		fmt.Fprintf(os.Stderr, "unable to play %d rounds\n", *numberOfRounds)
 		os.Exit(1)
 	}
-	playerBlack := player.NewRandomPlayer(board.Black, "Randy Random")
-	playerWhite := player.NewStdinPlayer(board.White, "Standard Input")
+	playerBlack := player.NewStdinPlayer(board.Black, "Standard Input")
+	playerWhite := player.NewMinimaxPlayerSpawnFunc(4)(board.White, "Mini Max IV.")
 	playerBlackWins, playerWhiteWins, ties, diff := 0, 0, 0, 0
 	for i := 0; i < *numberOfRounds; i++ {
 		game := game.NewGame(playerBlack, playerWhite)
