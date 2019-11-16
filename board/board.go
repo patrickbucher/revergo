@@ -1,6 +1,11 @@
 package board
 
-import "errors"
+import (
+	"bytes"
+	"errors"
+	"fmt"
+	"strings"
+)
 
 // EmptyBoard creates a new Board with every field set to Empty.
 func EmptyBoard() *Board {
@@ -144,6 +149,41 @@ func Other(this State) State {
 		return Black
 	}
 	return Empty
+}
+
+// Render renders the board using the given runes for black/white/empty fields
+// and adds the given row and column labels.
+func (b *Board) Render(black, white, empty rune, rowLabels, colLabels []rune) (string, error) {
+	if len(rowLabels) != Dimension || len(colLabels) != Dimension {
+		return "", fmt.Errorf("label slices must have length %d", Dimension)
+	}
+	buf := bytes.NewBufferString("")
+	title := bytes.NewBufferString("+ ")
+	for _, col := range colLabels {
+		title.WriteRune(col)
+		title.WriteRune(' ')
+	}
+	buf.WriteString(strings.TrimSpace(title.String()))
+	buf.WriteRune('\n')
+	for r, rowLabel := range rowLabels {
+		line := bytes.NewBufferString("")
+		line.WriteRune(rowLabel)
+		line.WriteRune(' ')
+		for c := 0; c < Dimension; c++ {
+			val := (*b)[r][c]
+			if val == Empty {
+				line.WriteRune(empty)
+			} else if val == Black {
+				line.WriteRune(black)
+			} else if val == White {
+				line.WriteRune(white)
+			}
+			line.WriteRune(' ')
+		}
+		buf.WriteString(strings.TrimSpace(line.String()))
+		buf.WriteRune('\n')
+	}
+	return strings.TrimSpace(buf.String()), nil
 }
 
 func containsMove(moves []*Move, move *Move) bool {

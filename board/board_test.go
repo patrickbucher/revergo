@@ -1,6 +1,7 @@
 package board
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -329,5 +330,42 @@ func TestOutcomeFinished(t *testing.T) {
 	}
 	if gotFinished != expectedFinished {
 		t.Errorf("expected finished to be %v, but was %v", expectedFinished, gotFinished)
+	}
+}
+
+func TestRender(t *testing.T) {
+	const emptyField = '-'
+	const blackPlayer = 'x'
+	const whitePlayer = 'o'
+	var rowLabels = []rune{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'}
+	var colLabels = []rune{'1', '2', '3', '4', '5', '6', '7', '8'}
+	position := &Board{
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 2, 1, 0, 0, 0},
+		{0, 0, 0, 1, 2, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0},
+	}
+
+	expected := strings.TrimSpace(`
++ 1 2 3 4 5 6 7 8
+a - - - - - - - -
+b - - - - - - - -
+c - - - - - - - -
+d - - - o x - - -
+e - - - x o - - -
+f - - - - - - - -
+g - - - - - - - -
+h - - - - - - - -`)
+
+	got, err := position.Render(blackPlayer, whitePlayer, emptyField, rowLabels, colLabels)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if got != expected {
+		t.Errorf("expected rendering \n%v\ngot rendering \n%v\n", expected, got)
 	}
 }
