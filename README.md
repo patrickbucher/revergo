@@ -37,3 +37,19 @@ with colors mixed in order to ensure there's no first mover advantage):
            6  Max Round              252       210        81       120         9     -1098
            7  Mini Max I.            232       210        76       130         4     -1621
            8  Randy Random           199       210        65       141         4     -2037
+
+Run a league with only two rounds, but with additional minimax players with
+deeper recursion levels:
+
+        Rank  Player              Points     Games       Won      Lost      Tied      Diff
+    --------  ----------------  --------  --------  --------  --------  --------  --------
+           1  Mini Max V.             83        36        27         7         2       568
+           2  Conny Corner            70        36        23        12         1       238
+           3  Corner Defense          61        36        20        15         1        50
+           4  Mini Max III.           60        36        20        16         0       148
+           5  Max Round               54        36        18        18         0       -74
+           6  Mini Max IV.            51        36        17        19         0        12
+           7  Edgy Edge               41        36        13        21         2      -179
+           8  Mini Max II.            40        36        13        22         1      -176
+           9  Mini Max I.             40        36        13        22         1      -213
+          10  Randy Random            36        36        12        24         0      -374
