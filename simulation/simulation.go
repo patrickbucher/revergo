@@ -19,7 +19,7 @@ func main() {
 		os.Exit(1)
 	}
 	playerBlack := player.NewStdinPlayer(board.Black, "Standard Input")
-	playerWhite := player.NewMinimaxPlayerSpawnFunc(4)(board.White, "Mini Max IV.")
+	playerWhite := player.NewMinimaxPlayerSpawnFunc(6)(board.White, "Mini Max VI.")
 	playerBlackWins, playerWhiteWins, ties, diff := 0, 0, 0, 0
 	for i := 0; i < *numberOfRounds; i++ {
 		game := game.NewGame(playerBlack, playerWhite)
