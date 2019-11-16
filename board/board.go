@@ -128,16 +128,16 @@ func (b *Board) Play(move *Move, player State) (*Board, error) {
 // the finished state of the game will be returned; otherwise, false is
 // returned.
 func (b *Board) Outcome(player State, opponent State) (int, bool) {
-	emptyFields := b.numberOfFields(Empty)
-	playerFields := b.numberOfFields(player)
-	opponentFields := b.numberOfFields(opponent)
+	emptyFields := b.NumberOfFields(Empty)
+	playerFields := b.NumberOfFields(player)
+	opponentFields := b.NumberOfFields(opponent)
 	return (playerFields - opponentFields), emptyFields == 0
 }
 
 // TurnsLeft returns the number of turns left, i.e. the number of Empty fields
 // on the board.
 func (b *Board) TurnsLeft() int {
-	return b.numberOfFields(Empty)
+	return b.NumberOfFields(Empty)
 }
 
 // Other returns the opponent's state of the given state.
@@ -186,6 +186,19 @@ func (b *Board) Render(black, white, empty rune, rowLabels, colLabels []rune) (s
 	return strings.TrimSpace(buf.String()), nil
 }
 
+// NumberOfFields returns the number of fields the player with the given state has captured.
+func (b *Board) NumberOfFields(state State) int {
+	n := 0
+	for r := 0; r < len(*b); r++ {
+		for c := 0; c < len((*b)[r]); c++ {
+			if (*b)[r][c] == state {
+				n++
+			}
+		}
+	}
+	return n
+}
+
 func containsMove(moves []*Move, move *Move) bool {
 	for _, candidate := range moves {
 		if candidate.Equal(move) {
@@ -229,16 +242,4 @@ func (b *Board) emptyFields() []*Move {
 		}
 	}
 	return empty
-}
-
-func (b *Board) numberOfFields(state State) int {
-	n := 0
-	for r := 0; r < len(*b); r++ {
-		for c := 0; c < len((*b)[r]); c++ {
-			if (*b)[r][c] == state {
-				n++
-			}
-		}
-	}
-	return n
 }
