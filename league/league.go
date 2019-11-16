@@ -19,13 +19,16 @@ func main() {
 	t := tournament.NewTournament()
 	t.AddPlayer("Randy Random", player.NewRandomPlayer)
 	t.AddPlayer("Conny Corner", player.NewCornerPlayer)
+	t.AddPlayer("Corner Defense", player.NewCornerdefensePlayer)
 	t.AddPlayer("Edgy Edge", player.NewEdgePlayer)
 	t.AddPlayer("Max Round", player.NewMaxroundPlayer)
 	t.AddPlayer("Mini Max I.", player.NewMinimaxPlayerSpawnFunc(1))
 	t.AddPlayer("Mini Max II.", player.NewMinimaxPlayerSpawnFunc(2))
 	t.AddPlayer("Mini Max III.", player.NewMinimaxPlayerSpawnFunc(3))
-	t.AddPlayer("Mini Max IV.", player.NewMinimaxPlayerSpawnFunc(4))
-	t.AddPlayer("Mini Max V.", player.NewMinimaxPlayerSpawnFunc(5))
+	/*
+		t.AddPlayer("Mini Max IV.", player.NewMinimaxPlayerSpawnFunc(4))
+		t.AddPlayer("Mini Max V.", player.NewMinimaxPlayerSpawnFunc(5))
+	*/
 	r, err := t.Play(*numberOfRounds)
 	if err != nil {
 		log.Print(err)

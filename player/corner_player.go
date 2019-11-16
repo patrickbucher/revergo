@@ -21,21 +21,17 @@ func NewCornerPlayer(state board.State, name string) *Player {
 	return &player
 }
 
-var corners = []*board.Move{
-	&board.Move{Row: 0, Col: 0},
-	&board.Move{Row: 0, Col: board.Dimension - 1},
-	&board.Move{Row: board.Dimension - 1, Col: 0},
-	&board.Move{Row: board.Dimension - 1, Col: board.Dimension - 1},
-}
-
 // Play tries to pick a corner field if available, and otherwise just picks a random move.
 func (p *CornerPlayer) Play(board *board.Board) *board.Move {
 	moves := board.ValidMoves(p.state)
 	if len(moves) == 0 {
 		return nil
 	}
+	if len(moves) == 1 {
+		return moves[0]
+	}
 	for _, move := range moves {
-		for _, cornerMove := range corners {
+		for _, cornerMove := range Corners {
 			if move.Equal(cornerMove) {
 				return move
 			}
