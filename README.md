@@ -54,6 +54,8 @@ deeper recursion levels:
            9  Mini Max I.             40        36        13        22         1      -213
           10  Randy Random            36        36        12        24         0      -374
 
+## Interactive Play
+
 Run a game against the computer (from `stdin`; pick an opponent by modifying the source code):
 
     go run simulation/simulation.go 
