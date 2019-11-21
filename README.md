@@ -8,17 +8,17 @@ Reversi implementation in Go for educational purposes (AI algorithms, golang, te
     - [x] determine valid moves
     - [x] apply player's move
     - [x] calculate outcome
-    - [ ] render board as string
+    - [x] render board as string
 - Players
     - [x] `STDIN` Player: Plays interactively from `STDIN`.
     - [x] Random Player: Picks a random move for every round.
     - [x] Corner Player: Goes for corners first, then for a random move.
-    - [ ] Corner/Edge Player: Goes for corners first, then for edges, then for a random move.
+    - [x] Corner/Edge Player: Goes for corners first, then for edges, then for a random move.
     - [x] Minimax Player: Applies Minimax algorithm (concurrently) with a limited step.
     - [ ] other ideas: Minimax player with corner strategy, …
 - Modes
     - [x] Simulation with two players, playing a lot of rounds against one another
-    - [ ] Tournament with multiple players, playing against each other twice (first and second leg)
+    - [x] Tournament with multiple players, playing against each other twice (first and second leg)
 
 ## League
 
@@ -53,3 +53,7 @@ deeper recursion levels:
            8  Mini Max II.            40        36        13        22         1      -176
            9  Mini Max I.             40        36        13        22         1      -213
           10  Randy Random            36        36        12        24         0      -374
+
+Run a game against the computer (from `stdin`; pick an opponent by modifying the source code):
+
+    go run simulation/simulation.go 
