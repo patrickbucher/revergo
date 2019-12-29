@@ -32,8 +32,8 @@ func main() {
 		fmt.Fprintf(os.Stderr, "unable to play %d rounds\n", *numberOfRounds)
 		os.Exit(1)
 	}
-	playerBlack := player.NewRandomPlayer(board.Black, "Randy Random")
-	playerWhite := player.NewMinimaxPlayerSpawnFunc(5)(board.White, "Mini Max V.")
+	playerBlack := player.NewMinimaxPlayerSpawnFunc(10)(board.Black, "Mini Max X.")
+	playerWhite := player.NewStdinPlayer(board.White, "Patrick Bucher")
 	playerBlackWins, playerWhiteWins, ties, diff := 0, 0, 0, 0
 	var wg sync.WaitGroup
 	ch := make(chan gameResult)
