@@ -8,8 +8,22 @@ import (
 	"revergo/game"
 	"revergo/player"
 	"strings"
+	"sync"
 	"text/tabwriter"
 )
+
+type gameWinner int
+
+const (
+	tie   gameWinner = 0
+	black gameWinner = 1
+	white gameWinner = 2
+)
+
+type gameResult struct {
+	winner gameWinner
+	diff   int
+}
 
 func main() {
 	numberOfRounds := flag.Int("n", 1, "number of rounds to play")
@@ -18,23 +32,42 @@ func main() {
 		fmt.Fprintf(os.Stderr, "unable to play %d rounds\n", *numberOfRounds)
 		os.Exit(1)
 	}
-	playerBlack := player.NewStdinPlayer(board.Black, "Standard Input")
-	playerWhite := player.NewMinimaxPlayerSpawnFunc(5)(board.White, "Mini Max V.")
+	playerBlack := player.NewCornerPlayer(board.Black, "Conny Corner")
+	playerWhite := player.NewMinimaxPlayerSpawnFunc(7)(board.White, "Mini Max VII.")
 	playerBlackWins, playerWhiteWins, ties, diff := 0, 0, 0, 0
+	var wg sync.WaitGroup
+	ch := make(chan gameResult, 0)
 	for i := 0; i < *numberOfRounds; i++ {
-		game := game.NewGame(playerBlack, playerWhite)
-		result := game.Play()
-		diff += result.Difference
-		if result.Winner == board.Black {
-			playerBlackWins++
-		} else if result.Winner == board.White {
-			playerWhiteWins++
-		} else {
-			ties++
-		}
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			game := game.NewGame(playerBlack, playerWhite)
+			result := game.Play()
+			winner := tie
+			if result.Winner == board.Black {
+				winner = black
+			} else if result.Winner == board.White {
+				winner = white
+			}
+			ch <- gameResult{winner, result.Difference}
+		}()
 	}
-	printResults((*playerBlack).Name(), (*playerWhite).Name(), playerBlackWins, playerWhiteWins,
-		ties, diff)
+	go func() {
+		for result := range ch {
+			diff += result.diff
+			if result.winner == black {
+				playerBlackWins++
+			} else if result.winner == white {
+				playerWhiteWins++
+			} else if result.winner == tie {
+				ties++
+			}
+		}
+		printResults((*playerBlack).Name(), (*playerWhite).Name(), playerBlackWins, playerWhiteWins,
+			ties, diff)
+	}()
+	wg.Wait()
+	close(ch)
 }
 
 func printResults(blackName, whiteName string, blackWins, whiteWins, ties, diff int) {
