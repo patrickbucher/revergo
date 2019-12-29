@@ -20,6 +20,7 @@ func main() {
 	t.AddPlayer("Randy Random", player.NewRandomPlayer)
 	t.AddPlayer("Conny Corner", player.NewCornerPlayer)
 	t.AddPlayer("Corner Defense", player.NewCornerdefensePlayer)
+	t.AddPlayer("Corner Avoidance", player.NewCorneravoidancePlayer)
 	t.AddPlayer("Edgy Edge", player.NewEdgePlayer)
 	t.AddPlayer("Max Round", player.NewMaxroundPlayer)
 	t.AddPlayer("Mini Max I.", player.NewMinimaxPlayerSpawnFunc(1))

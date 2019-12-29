@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// CornerDefensePlayer is a player that tries to pick the corners if available,
+// CornerdefensePlayer is a player that tries to pick the corners if available,
 // and tries to avoid all moves that make it possible for the opponent to grab
 // a corner in the next move.
 type CornerdefensePlayer struct {
