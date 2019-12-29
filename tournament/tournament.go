@@ -9,6 +9,7 @@ import (
 	"revergo/player"
 	"sort"
 	"strings"
+	"sync"
 	"text/tabwriter"
 )
 
@@ -78,13 +79,32 @@ func (t *Tournament) Play(rounds int) (*Result, error) {
 		return nil, errors.New("need at least two players to play a tournament")
 	}
 	pairings := t.pairUp()
-	results := make(map[string]*PlayerStatistics, 0)
+	type pairingResult struct {
+		p pairing
+		r *game.Result
+	}
+	var wg sync.WaitGroup
+	ch := make(chan pairingResult)
 	for r := 0; r < rounds; r++ {
 		for _, p := range pairings {
-			black := p.blackPlayer
-			white := p.whitePlayer
-			g := game.NewGame(black, white)
-			r := g.Play()
+			wg.Add(1)
+			go func(p pairing) {
+				defer wg.Done()
+				black := p.blackPlayer
+				white := p.whitePlayer
+				g := game.NewGame(black, white)
+				r := g.Play()
+				ch <- pairingResult{p, r}
+			}(p)
+		}
+	}
+	resultChan := make(chan map[string]*PlayerStatistics)
+	go func() {
+		results := make(map[string]*PlayerStatistics, 0)
+		for pr := range ch {
+			black := pr.p.blackPlayer
+			white := pr.p.whitePlayer
+			r := pr.r
 			blackStat, ok := results[(*black).Name()]
 			if !ok {
 				blackStat = &PlayerStatistics{(*black).Name(), 0, 0, 0, 0, 0, 0}
@@ -114,8 +134,11 @@ func (t *Tournament) Play(rounds int) (*Result, error) {
 			(*blackStat).Diff += r.Difference
 			(*whiteStat).Diff -= r.Difference
 		}
-	}
-	tournamentResult := Result{results}
+		resultChan <- results
+	}()
+	wg.Wait()
+	close(ch)
+	tournamentResult := Result{<-resultChan}
 	return &tournamentResult, nil
 }
 
