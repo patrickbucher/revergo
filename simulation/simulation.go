@@ -32,11 +32,11 @@ func main() {
 		fmt.Fprintf(os.Stderr, "unable to play %d rounds\n", *numberOfRounds)
 		os.Exit(1)
 	}
-	playerBlack := player.NewCornerPlayer(board.Black, "Conny Corner")
-	playerWhite := player.NewMinimaxPlayerSpawnFunc(7)(board.White, "Mini Max VII.")
+	playerBlack := player.NewRandomPlayer(board.Black, "Randy Random")
+	playerWhite := player.NewMinimaxPlayerSpawnFunc(10)(board.White, "Mini Max X.")
 	playerBlackWins, playerWhiteWins, ties, diff := 0, 0, 0, 0
 	var wg sync.WaitGroup
-	ch := make(chan gameResult, 0)
+	ch := make(chan gameResult)
 	for i := 0; i < *numberOfRounds; i++ {
 		wg.Add(1)
 		go func() {
@@ -52,6 +52,7 @@ func main() {
 			ch <- gameResult{winner, result.Difference}
 		}()
 	}
+	done := make(chan struct{})
 	go func() {
 		for result := range ch {
 			diff += result.diff
@@ -65,9 +66,11 @@ func main() {
 		}
 		printResults((*playerBlack).Name(), (*playerWhite).Name(), playerBlackWins, playerWhiteWins,
 			ties, diff)
+		done <- struct{}{}
 	}()
 	wg.Wait()
 	close(ch)
+	<-done
 }
 
 func printResults(blackName, whiteName string, blackWins, whiteWins, ties, diff int) {
