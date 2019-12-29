@@ -1,7 +1,6 @@
 package game
 
 import (
-	"log"
 	"revergo/board"
 	player "revergo/player"
 )
@@ -53,7 +52,6 @@ func (g *Game) Play() *Result {
 		if move == nil {
 			stuckCount++
 			if stuckCount == 2 {
-				log.Println("game is stuck")
 				diff, _ := g.board.Outcome(board.Black, board.White)
 				winner := board.Empty
 				if diff > 0 {
