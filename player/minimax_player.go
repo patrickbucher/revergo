@@ -90,7 +90,7 @@ func minimax(b *board.Board, self, other board.State, depth, ourBest, oppBest in
 			alpha = diff
 			bestOutcome = outcome{diff, m}
 		}
-		if diff*-1 > beta {
+		if diff*-1 < beta {
 			beta = diff * -1
 		}
 		if ourBest != worstPossible && alpha > ourBest {
