@@ -33,7 +33,7 @@ func main() {
 		os.Exit(1)
 	}
 	playerBlack := player.NewRandomPlayer(board.Black, "Randy Random")
-	playerWhite := player.NewMinimaxPlayerSpawnFunc(10)(board.White, "Mini Max X.")
+	playerWhite := player.NewMinimaxPlayerSpawnFunc(5)(board.White, "Mini Max V.")
 	playerBlackWins, playerWhiteWins, ties, diff := 0, 0, 0, 0
 	var wg sync.WaitGroup
 	ch := make(chan gameResult)
