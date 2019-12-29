@@ -3,7 +3,6 @@ package player
 import (
 	"math"
 	"revergo/board"
-	"sync"
 )
 
 // MinimaxPlayer is a player that tries to optimize the outcome for the whole
@@ -41,6 +40,11 @@ func NewMinimaxPlayer(state board.State, name string) *Player {
 	return &player
 }
 
+const (
+	worstPossible = math.MinInt32
+	bestPossible  = math.MaxInt32
+)
+
 // Play applies the Minimax algorithm to find the move that yields the best
 // outcome over the next n moves, with n determined by the depth parameter of
 // the constructor function.
@@ -53,7 +57,7 @@ func (p *MinimaxPlayer) Play(b *board.Board) *board.Move {
 		return candidates[0]
 	}
 	depth := int(math.Min(float64(b.TurnsLeft()), float64(p.depth)))
-	outcome := minimax(b, p.state, board.Other(p.state), depth)
+	outcome := minimax(b, p.state, board.Other(p.state), depth, worstPossible, bestPossible)
 	return outcome.move
 }
 
@@ -62,40 +66,37 @@ type outcome struct {
 	move *board.Move
 }
 
-func minimax(b *board.Board, self, other board.State, depth int) outcome {
+func minimax(b *board.Board, self, other board.State, depth, ourBest, oppBest int) outcome {
 	validMoves := b.ValidMoves(self)
-	ch := make(chan outcome)
-	var wg sync.WaitGroup
+	bestOutcome := outcome{(board.Dimension * board.Dimension) * -1, nil}
+	alpha := worstPossible
+	beta := bestPossible
 	for _, move := range validMoves {
 		result, err := b.Play(move, self)
 		if err != nil {
 			panic("applied invalid move")
 		}
-		wg.Add(1)
 		m := &board.Move{Row: move.Row, Col: move.Col}
-		go func() {
-			defer wg.Done()
-			if depth > 1 {
-				// players switched: other <-> self
-				result := minimax(result, other, self, depth-1)
-				// invert outcome: our move with opponent's weakest counter move
-				ch <- outcome{result.diff * -1, m}
-			} else {
-				diff, _ := b.Outcome(self, other)
-				ch <- outcome{diff, m}
-			}
-		}()
-	}
-	bestOutcome := outcome{(board.Dimension * board.Dimension) * -1, nil}
-	go func() {
-		for result := range ch {
-			if result.diff > bestOutcome.diff {
-				bestOutcome = result
-			}
+		diff := 0
+		if depth > 1 {
+			// players switched: other <-> self, alpha <-> beta
+			minimaxResult := minimax(result, other, self, depth-1, beta*-1, alpha*-1)
+			// invert outcome: our move with opponent's weakest counter move
+			diff = minimaxResult.diff * -1
+		} else {
+			diff, _ = b.Outcome(self, other)
 		}
-	}()
-	wg.Wait()
-	close(ch)
+		if diff > alpha {
+			alpha = diff
+			bestOutcome = outcome{diff, m}
+		}
+		if diff*-1 > beta {
+			beta = diff * -1
+		}
+		if ourBest != worstPossible && alpha > ourBest {
+			return bestOutcome
+		}
+	}
 	return bestOutcome
 }
 
