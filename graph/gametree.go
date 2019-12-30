@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"os"
 	"revergo/board"
+	"time"
 )
 
 type Node struct {
@@ -73,13 +75,35 @@ func (n *Node) Identifier() string {
 
 func main() {
 	depth := flag.Int("depth", 1, "depth of the tree")
+	ahead := flag.Int("ahead", 0, "number of (random) moves to play ahead")
 	flag.Parse()
 	if *depth <= 0 {
 		log.Fatal("depth must be positive")
 	}
-
+	if *ahead < 0 {
+		log.Fatal("ahead must not be negative ")
+	}
 	b := board.InitialBoard()
-	root := buildGameTree(b, 1, 2, *depth, 0, 0, nil, "")
+
+	playerLastMove := board.Black
+	playerNextMove := board.White
+	if *ahead > 0 {
+		rand.Seed(time.Now().Unix())
+		for player := board.Black; *ahead > 0; *ahead-- {
+			moves := b.ValidMoves(player)
+			m := moves[rand.Intn(len(moves))]
+			b, _ = b.Play(m, player)
+			playerLastMove = player
+			if player == board.Black {
+				player = board.White
+			} else {
+				player = board.Black
+			}
+			playerNextMove = player
+		}
+	}
+
+	root := buildGameTree(b, playerLastMove, playerNextMove, *depth, 0, 0, nil, "")
 	graph := root.Graphviz("gametree")
 	io.Copy(os.Stdout, graph)
 }
@@ -89,7 +113,7 @@ func buildGameTree(b *board.Board, player, opponent board.State, depth, level, m
 	if depth <= 0 {
 		return nil
 	}
-	diff, _ := b.Outcome(1, 2)
+	diff, _ := b.Outcome(1, 2) // always view from same player's perspective
 	movePath = fmt.Sprintf("%s-%d", movePath, moveNr)
 	node := Node{
 		Value:    diff,
