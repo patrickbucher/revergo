@@ -25,7 +25,7 @@ func main() {
 	t.AddPlayer("Max Round", player.NewMaxroundPlayer)
 	t.AddPlayer("Mini Max I.", player.NewMinimaxPlayerSpawnFunc(1))
 	t.AddPlayer("Mini Max III.", player.NewMinimaxPlayerSpawnFunc(3))
-	t.AddPlayer("Mini Max VI.", player.NewMinimaxPlayerSpawnFunc(6))
+	t.AddPlayer("Mini Max V.", player.NewMinimaxPlayerSpawnFunc(5))
 	r, err := t.Play(*numberOfRounds)
 	if err != nil {
 		log.Print(err)

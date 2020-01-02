@@ -30,15 +30,15 @@ with colors mixed in order to ensure there's no first mover advantage):
 
         Rank  Player              Points     Games       Won      Lost      Tied      Diff
     --------  ----------------  --------  --------  --------  --------  --------  --------
-           1  Conny Corner           310       160       102        54         4       953
-           2  Mini Max VI.           301       160        96        51        13      1576
-           3  Corner Defense         289       160        93        57        10       545
-           4  Corner Avoidance       260       160        84        68         8       181
-           5  Mini Max III.          245       160        80        75         5      1046
-           6  Max Round              214       160        70        86         4      -294
-           7  Edgy Edge              201       160        66        91         3      -651
-           8  Mini Max I.            177       160        54        91        15     -1676
-           9  Randy Random           130       160        42       114         4     -1680
+           1  Mini Max V.            377       160       125        33         2      3034
+           2  Mini Max III.          301       160       100        59         1      1757
+           3  Corner Defense         264       160        84        64        12        98
+           4  Conny Corner           258       160        84        70         6       377
+           5  Edgy Edge              241       160        79        77         4        40
+           6  Corner Avoidance       237       160        76        75         9       134
+           7  Max Round              176       160        57        98         5     -1507
+           8  Mini Max I.            150       160        49       108         3     -2276
+           9  Randy Random           133       160        43       113         4     -1657
 
 ## Interactive Play
 

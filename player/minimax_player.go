@@ -41,8 +41,8 @@ func NewMinimaxPlayer(state board.State, name string) *Player {
 }
 
 const (
-	worstPossible = math.MinInt32
-	bestPossible  = math.MaxInt32
+	worstPossible = -(board.Dimension * board.Dimension)
+	bestPossible  = +(board.Dimension * board.Dimension)
 )
 
 // Play applies the Minimax algorithm to find the move that yields the best
@@ -66,11 +66,10 @@ type outcome struct {
 	move *board.Move
 }
 
-func minimax(b *board.Board, self, other board.State, depth, ourBest, oppBest int) outcome {
+func minimax(b *board.Board, self, other board.State, depth, alpha, beta int) outcome {
 	validMoves := b.ValidMoves(self)
 	bestOutcome := outcome{(board.Dimension * board.Dimension) * -1, nil}
-	alpha := worstPossible
-	beta := bestPossible
+	ourBest := alpha
 	for _, move := range validMoves {
 		result, err := b.Play(move, self)
 		if err != nil {
@@ -80,21 +79,18 @@ func minimax(b *board.Board, self, other board.State, depth, ourBest, oppBest in
 		diff := 0
 		if depth > 1 {
 			// players switched: other <-> self, alpha <-> beta
-			minimaxResult := minimax(result, other, self, depth-1, -beta, -alpha)
+			minimaxResult := minimax(result, other, self, depth-1, -beta, -ourBest)
 			// invert outcome: our move with opponent's weakest counter move
 			diff = minimaxResult.diff * -1
 		} else {
 			diff, _ = b.Outcome(self, other)
 		}
-		if diff > alpha {
-			alpha = diff
+		if diff > ourBest {
+			ourBest = diff
 			bestOutcome = outcome{diff, m}
-		}
-		if -diff < beta {
-			beta = -diff
-		}
-		if ourBest != worstPossible && alpha > ourBest {
-			return bestOutcome
+			if ourBest >= beta {
+				return bestOutcome
+			}
 		}
 	}
 	return bestOutcome
