@@ -69,24 +69,27 @@ type outcome struct {
 func minimax(b *board.Board, self, other board.State, depth, alpha, beta int) outcome {
 	validMoves := b.ValidMoves(self)
 	bestOutcome := outcome{alpha, nil}
-	ourBest := alpha
+	value := worstPossible
 	for _, move := range validMoves {
 		result, _ := b.Play(move, self)
-		diff := 0
-		if depth > 0 {
-			// players switched: other <-> self, alpha <-> beta
-			minimaxResult := minimax(result, other, self, depth-1, -beta, -ourBest)
-			// invert outcome: our move with opponent's weakest counter move
-			diff = minimaxResult.diff * -1
+		next := 0
+		if depth == 1 {
+			next, _ = b.Outcome(self, other)
 		} else {
-			diff, _ = b.Outcome(self, other)
+			// players switched: other <-> self, alpha <-> beta
+			minimaxResult := minimax(result, other, self, depth-1, -beta, -alpha)
+			// invert outcome: our move with opponent's weakest counter move
+			next = minimaxResult.diff * -1
 		}
-		if diff > ourBest {
-			ourBest = diff
-			bestOutcome = outcome{diff, &board.Move{Row: move.Row, Col: move.Col}}
-			if ourBest >= beta {
-				return bestOutcome
-			}
+		if next > value {
+			value = next
+			bestOutcome = outcome{value, &board.Move{Row: move.Row, Col: move.Col}}
+		}
+		if next >= beta {
+			return outcome{value, &board.Move{Row: move.Row, Col: move.Col}}
+		}
+		if next > alpha {
+			alpha = next
 		}
 	}
 	return bestOutcome

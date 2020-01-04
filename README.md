@@ -26,19 +26,19 @@ Reversi implementation in Go for educational purposes (AI algorithms, golang, te
 Run a league with 10 rounds (all players play 20 rounds against one another
 with colors mixed in order to ensure there's no first mover advantage):
 
-    $ go run league/league.go -n 10
+    $ go run league/league.go -n 2
 
         Rank  Player              Points     Games       Won      Lost      Tied      Diff
     --------  ----------------  --------  --------  --------  --------  --------  --------
-           1  Mini Max V.            377       160       125        33         2      3034
-           2  Mini Max III.          301       160       100        59         1      1757
-           3  Corner Defense         264       160        84        64        12        98
-           4  Conny Corner           258       160        84        70         6       377
-           5  Edgy Edge              241       160        79        77         4        40
-           6  Corner Avoidance       237       160        76        75         9       134
-           7  Max Round              176       160        57        98         5     -1507
-           8  Mini Max I.            150       160        49       108         3     -2276
-           9  Randy Random           133       160        43       113         4     -1657
+           1  Mini Max V.             73        32        24         7         1       641
+           2  Mini Max III.           69        32        23         9         0       551
+           3  Corner Avoidance        56        32        18        12         2        73
+           4  Conny Corner            49        32        16        15         1        -2
+           5  Corner Defense          43        32        14        17         1       -14
+           6  Edgy Edge               42        32        14        18         0      -144
+           7  Randy Random            36        32        12        20         0      -318
+           8  Max Round               34        32        11        20         1      -285
+           9  Mini Max I.             27        32         9        23         0      -502
 
 ## Interactive Play
 
