@@ -26,19 +26,19 @@ Reversi implementation in Go for educational purposes (AI algorithms, golang, te
 Run a league with 10 rounds (all players play 20 rounds against one another
 with colors mixed in order to ensure there's no first mover advantage):
 
-    $ go run league/league.go -n 2
+    $ go run league/league.go -n 5
 
         Rank  Player              Points     Games       Won      Lost      Tied      Diff
     --------  ----------------  --------  --------  --------  --------  --------  --------
-           1  Mini Max V.             73        32        24         7         1       641
-           2  Mini Max III.           69        32        23         9         0       551
-           3  Corner Avoidance        56        32        18        12         2        73
-           4  Conny Corner            49        32        16        15         1        -2
-           5  Corner Defense          43        32        14        17         1       -14
-           6  Edgy Edge               42        32        14        18         0      -144
-           7  Randy Random            36        32        12        20         0      -318
-           8  Max Round               34        32        11        20         1      -285
-           9  Mini Max I.             27        32         9        23         0      -502
+           1  Mini Max VI.           194        80        64        14         2      1026
+           2  Mini Max IV.           143        80        47        31         2       385
+           3  Conny Corner           133        80        41        29        10       131
+           4  Corner Defense         132        80        43        34         3        95
+           5  Corner Avoidance       115        80        36        37         7       -41
+           6  Mini Max II.           108        80        35        42         3       127
+           7  Max Round               98        80        32        46         2      -174
+           8  Edgy Edge               87        80        28        49         3      -507
+           9  Randy Random            51        80        15        59         6     -1042
 
 ## Interactive Play
 
